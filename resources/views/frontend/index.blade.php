@@ -136,7 +136,7 @@
                                     <div class="single-product">
                                         <div class="product-img">
                                             <a href="{{route('product-detail',$product->slug)}}">
-                                                @php 
+                                                @php
                                                     $photo=explode(',',$product->photo);
                                                 // dd($photo);
                                                 @endphp

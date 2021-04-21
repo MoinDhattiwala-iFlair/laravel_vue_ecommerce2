@@ -8,6 +8,8 @@ class Product extends Model
 {
     protected $fillable=['title','slug','summary','description','cat_id','child_cat_id','price','brand_id','discount','status','photo','size','stock','is_featured','condition'];
 
+    protected $appends = ['photos'];
+
     public function cat_info(){
         return $this->hasOne('App\Models\Category','id','cat_id');
     }
@@ -40,6 +42,11 @@ class Product extends Model
 
     public function wishlists(){
         return $this->hasMany(Wishlist::class)->whereNotNull('cart_id');
+    }
+
+    public function getPhotosAttribute()
+    {
+        return explode(',', $this->photo ?? '');
     }
 
 }

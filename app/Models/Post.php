@@ -8,6 +8,7 @@ class Post extends Model
 {
     protected $fillable=['title','tags','summary','slug','description','photo','quote','post_cat_id','post_tag_id','added_by','status'];
 
+    protected $appends = ['created_at_formated'];
 
     public function cat_info(){
         return $this->hasOne('App\Models\PostCategory','id','post_cat_id');
@@ -57,5 +58,10 @@ class Post extends Model
             return $data;
         }
         return 0;
+    }
+
+    public function getCreatedAtFormatedAttribute()
+    {
+        return $this->created_at->format('d M , Y. D');
     }
 }
