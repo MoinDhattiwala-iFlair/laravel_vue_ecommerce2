@@ -1,3 +1,4 @@
+
 # Advance E-commerce website in  Laravel 7
 
 
@@ -104,4 +105,3 @@ Many more....
 12. Visit /admin if you want to access the admin panel. Admin Email/Password: admin@gmail.com/1111. User Email/Password: user@gmail.com/1111
 
 <p style="text-align:center">Thank You so much for your time !!!</p>
-
