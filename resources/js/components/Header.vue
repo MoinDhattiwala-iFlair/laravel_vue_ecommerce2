@@ -77,9 +77,9 @@
               <div class="search-bar">
                 <select>
                   <option>All Category</option>
-                  <option>Kid&#039;s</option>
-                  <option>Men&#039;s Fashion</option>
-                  <option>Women&#039;s Fashion</option>
+                  <option v-for="index in categories" :key="index">
+                    {{ category.title }}
+                  </option>
                 </select>
                 <form method="POST" action="http://vp2.test/laravel/product/search">
                   <input
@@ -132,9 +132,9 @@
                   <div class="navbar-collapse">
                     <div class="nav-inner">
                       <ul class="nav main-menu menu navbar-nav">
-                        <li class=""><a href="http://vp2.test/laravel">Home</a></li>
+                        <li class=""><router-link to="/">Home</router-link></li>
                         <li class="">
-                          <a href="http://vp2.test/laravel/about-us">About Us</a>
+                          <router-link to="/about-us">About Us</router-link>
                         </li>
                         <li class="">
                           <a href="http://vp2.test/laravel/product-grids">Products</a
@@ -146,44 +146,25 @@
                             >Category<i class="ti-angle-down"></i
                           ></a>
                           <ul class="dropdown border-0 shadow">
-                            <li>
-                              <a href="http://vp2.test/laravel/product-cat/kids">Kid's</a>
-                            </li>
-                            <li>
-                              <a href="http://vp2.test/laravel/product-cat/mens-fashion"
-                                >Men's Fashion</a
+                            <li v-for="(category, index) in categories" :key="index">
+                              <a href="http://vp2.test/laravel/product-cat/mens-fashion">
+                                {{ category.title }}
+                              </a>
+                              <ul
+                                class="dropdown sub-dropdown border-0 shadow"
+                                v-if="category.child_cat.length > 0"
                               >
-                              <ul class="dropdown sub-dropdown border-0 shadow">
-                                <li>
+                                <li
+                                  v-for="(child_cat, index) in category.child_cat"
+                                  :key="index"
+                                >
                                   <a
                                     href="http://vp2.test/laravel/product-sub-cat/mens-fashion/t-shirts"
-                                    >T-shirt's</a
                                   >
-                                </li>
-                                <li>
-                                  <a
-                                    href="http://vp2.test/laravel/product-sub-cat/mens-fashion/jeans-pants"
-                                    >Jeans pants</a
-                                  >
-                                </li>
-                                <li>
-                                  <a
-                                    href="http://vp2.test/laravel/product-sub-cat/mens-fashion/sweater-jackets"
-                                    >Sweater & Jackets</a
-                                  >
-                                </li>
-                                <li>
-                                  <a
-                                    href="http://vp2.test/laravel/product-sub-cat/mens-fashion/rain-coats-trenches"
-                                    >Rain Coats & Trenches</a
-                                  >
+                                    {{ child_cat.title }}
+                                  </a>
                                 </li>
                               </ul>
-                            </li>
-                            <li>
-                              <a href="http://vp2.test/laravel/product-cat/womens-fashion"
-                                >Women's Fashion</a
-                              >
                             </li>
                           </ul>
                         </li>
@@ -215,11 +196,19 @@ export default {
     authUser() {
       return this.$store.getters["auth/get"];
     },
+    categories() {
+      return this.$store.getters["category/get"];
+    },
   },
   methods: {
     logout() {
       this.$store.dispatch("auth/logout");
     },
+  },
+  async created() {
+    await this.$store.dispatch("category/fetch", { params: { withChildCat: true } });
+    console.log("this.categories", this.categories);
+    $("select").niceSelect("update");
   },
 };
 </script>

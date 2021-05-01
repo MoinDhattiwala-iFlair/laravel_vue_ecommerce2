@@ -30,4 +30,5 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'], function () {
     Route::get('/product/featured', 'ApiController@featuredProduct');
     Route::get('/product/hot', 'ApiController@hotProduct');
     Route::get('/post/all', 'ApiController@allPost');
+    Route::get('/settings', 'ApiController@settings');
 });

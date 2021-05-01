@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -86,7 +87,9 @@ class ApiController extends Controller
 
     public function allCategory(Request $request)
     {
-        $categories = Category::where('status', 'active');
+        $categories = Category::when($request->has('withChildCat'), function ($category) {
+            $category->where('is_parent', 1)->with('child_cat');
+        })->where('status', 'active');
         if ($request->has('limit')) {
             $categories = $categories->limit($request->get('limit'));
         }
@@ -95,7 +98,7 @@ class ApiController extends Controller
 
     public function parentCategory(Request $request)
     {
-        $categories = Category::where('status', 'active')->where('is_parent', 1);        
+        $categories = Category::where('status', 'active')->where('is_parent', 1);
         return $categories->get();
     }
     
@@ -138,4 +141,14 @@ class ApiController extends Controller
     }
 
     /* Post (Blog) Methods end */    
+
+    /* Settings  Methods start */
+
+    public function settings()
+    {
+        return Settings::first();
+    }
+    
+
+    /* Settings  Methods end */
 }

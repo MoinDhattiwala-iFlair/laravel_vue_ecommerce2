@@ -1,9 +1,13 @@
 import axios from '../../plugins/axios'
 const state = {
+    categories: {},
     smallBanners: {},
     parentCategories: {},
 };
 const getters = {
+    get(state, getters) {
+        return state.categories;
+    },
     getSmallBanners(state, getters) {
         return state.smallBanners;
     },
@@ -12,6 +16,18 @@ const getters = {
     },
 };
 const actions = {
+    fetch(context, params) {
+        return new Promise((resolve, reject) => {
+            axios.get('/category/all', params).then((result) => {
+                //console.log('sb rs', result.data);
+                context.commit('set', result.data);
+                resolve();
+            }).catch((err) => {
+                console.log('sb err', err.response);
+                reject(err.response)
+            });
+        });
+    },
     fetchSmallBanners(context, params) {
         return new Promise((resolve, reject) => {
             axios.get('/category/all', params).then((result) => {
@@ -38,6 +54,9 @@ const actions = {
     }
 };
 const mutations = {
+    set(state, categories) {
+        state.categories = categories;
+    },
     setSmallBanners(state, smallBanners) {
         state.smallBanners = smallBanners;
     },
